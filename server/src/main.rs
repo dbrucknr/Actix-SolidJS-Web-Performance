@@ -1,10 +1,10 @@
-#[macro_use]
-extern crate diesel;
+// #[macro_use]
+// extern crate diesel;
 
-use actix_web::{get, middleware, post, web, App, Error, HttpResponse, HttpServer, Responder};
-use diesel::prelude::*;
-use diesel::r2d2::{self, ConnectionManager};
+use actix_web::{get, App, HttpResponse, HttpServer, Responder};
+use dotenv::dotenv;
 use listenfd::ListenFd;
+use std::env;
 // use uuid::Uuid;
 
 // type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
@@ -17,7 +17,7 @@ async fn index() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let mut listenfd = ListenFd::from_env();
-    dotenv::dotenv().ok();
+    dotenv().ok();
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     // Set up Database Connection Pool:
@@ -27,7 +27,7 @@ async fn main() -> std::io::Result<()> {
     //     .build(manager)
     //     .expect("Failed to create pool.");
 
-    log::info!("starting HTTP server at http://localhost:8080");
+    log::info!("Starting HTTP server at http://localhost:8080");
 
     // Declare HTTP server
     let mut server = HttpServer::new(move || {
@@ -40,9 +40,12 @@ async fn main() -> std::io::Result<()> {
 
     server = match listenfd.take_tcp_listener(0)? {
         Some(listener) => server.listen(listener)?,
-        None => server.bind("127.0.0.1:8080")?,
+        None => {
+            let host = env::var("HOST").expect("Host not set");
+            let port = env::var("PORT").expect("Port not set");
+            server.bind(format!("{}:{}", host, port))?
+        }
     };
 
-    // Start HTTP server
     server.run().await
 }
