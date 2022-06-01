@@ -1,13 +1,9 @@
-// #[macro_use]
-// extern crate diesel;
-
 use actix_web::{get, App, HttpResponse, HttpServer, Responder};
 use dotenv::dotenv;
 use listenfd::ListenFd;
 use std::env;
-// use uuid::Uuid;
 
-// type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
+mod user;
 
 #[get("/")]
 async fn index() -> impl Responder {
@@ -30,13 +26,8 @@ async fn main() -> std::io::Result<()> {
     log::info!("Starting HTTP server at http://localhost:8080");
 
     // Declare HTTP server
-    let mut server = HttpServer::new(move || {
-        App::new()
-            // set up DB pool to be used with web::Data<Pool> extractor
-            // .app_data(web::Data::new(pool.clone()))
-            // .wrap(middleware::Logger::default())
-            .service(index)
-    });
+    let mut server =
+        HttpServer::new(move || App::new().configure(user::init_routes).service(index));
 
     server = match listenfd.take_tcp_listener(0)? {
         Some(listener) => server.listen(listener)?,
