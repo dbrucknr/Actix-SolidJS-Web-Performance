@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 actix-web = "^4"
+actix-cors = "^0.6"
 actix-rt = "^1.0"
 chrono = { version = "0.4", features = ["serde"] }
 diesel = { version = "1.4.8", features = ["postgres", "r2d2", "uuidv07", "chrono"] }

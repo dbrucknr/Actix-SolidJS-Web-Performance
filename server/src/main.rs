@@ -5,7 +5,8 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-use actix_web::{get, App, HttpResponse, HttpServer, Responder};
+use actix_cors::Cors;
+use actix_web::{get, http::header, App, HttpResponse, HttpServer, Responder};
 use dotenv::dotenv;
 use listenfd::ListenFd;
 use std::env;
@@ -28,8 +29,20 @@ async fn main() -> std::io::Result<()> {
     db::init();
 
     // Declare HTTP server
-    let mut server =
-        HttpServer::new(move || App::new().configure(user::init_routes).service(index));
+    let mut server = HttpServer::new(move || {
+        App::new()
+            .wrap(
+                Cors::default()
+                    .allowed_origin("http://localhost:3000")
+                    .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+                    .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
+                    .allowed_header(header::CONTENT_TYPE)
+                    .supports_credentials()
+                    .max_age(3600),
+            )
+            .configure(user::init_routes)
+            .service(index)
+    });
 
     server = match listenfd.take_tcp_listener(0)? {
         Some(listener) => server.listen(listener)?,
