@@ -1,8 +1,18 @@
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate diesel;
+#[macro_use]
+extern crate diesel_migrations;
+
 use actix_web::{get, App, HttpResponse, HttpServer, Responder};
 use dotenv::dotenv;
 use listenfd::ListenFd;
 use std::env;
 
+mod api_error;
+mod db;
+mod schema;
 mod user;
 
 #[get("/")]
@@ -15,13 +25,7 @@ async fn main() -> std::io::Result<()> {
     let mut listenfd = ListenFd::from_env();
     dotenv().ok();
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
-
-    // Set up Database Connection Pool:
-    // let conn_spec = std::env::var("DATABASE_URL").expect("DATABASE_URL");
-    // let manager = ConnectionManager::<PgConnection>::new(conn_spec);
-    // let pool = r2d2::Pool::builder()
-    //     .build(manager)
-    //     .expect("Failed to create pool.");
+    db::init();
 
     // Declare HTTP server
     let mut server =
