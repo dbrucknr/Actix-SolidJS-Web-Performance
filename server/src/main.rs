@@ -23,8 +23,6 @@ async fn main() -> std::io::Result<()> {
     //     .build(manager)
     //     .expect("Failed to create pool.");
 
-    log::info!("Starting HTTP server at http://localhost:8080");
-
     // Declare HTTP server
     let mut server =
         HttpServer::new(move || App::new().configure(user::init_routes).service(index));
@@ -38,5 +36,6 @@ async fn main() -> std::io::Result<()> {
         }
     };
 
+    log::info!("Starting HTTP server at http://localhost:8080");
     server.run().await
 }

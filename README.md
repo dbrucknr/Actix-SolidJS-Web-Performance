@@ -13,3 +13,11 @@
 
 - To start server: **systemfd --no-pid -s h
   ttp::8080 -- cargo watch -x run**
+
+- install ORM: `cargo install diesel_cli --no-default-features --features postgres`
+- Tell Diesel where DB is located in the .env file (not included in GitHub): `DATABASE_URL=postgres://postgres:password@localhost/rest_api`
+- use `diesel setup` in your terminal to creare a DB and to create a migrations folder in the server folder.
+- use `diesel migration generate create_user` in your terminal to create files for our user migration.
+  - Edit the `up.sql` and `down.sql` files located in the generated migrations folder.
+- Apply first migration using the `diesel migration run` command in your terminal.
+  - Creates a `schema.rs` file in the src folder.
