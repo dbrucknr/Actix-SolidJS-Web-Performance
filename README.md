@@ -21,3 +21,9 @@
   - Edit the `up.sql` and `down.sql` files located in the generated migrations folder.
 - Apply first migration using the `diesel migration run` command in your terminal.
   - Creates a `schema.rs` file in the src folder.
+- Add CORS to API (so client can request data): `actix-cors` needs to be added to dependencies. change `main.rs` to match base example.
+
+### Resources:
+
+- Diesel: https://diesel.rs/guides/getting-started
+- File Imports: https://hackernoon.com/including-files-and-deeply-directories-in-rust-q35o3yer
