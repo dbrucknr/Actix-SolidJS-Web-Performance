@@ -27,3 +27,8 @@
 
 - Diesel: https://diesel.rs/guides/getting-started
 - File Imports: https://hackernoon.com/including-files-and-deeply-directories-in-rust-q35o3yer
+
+# To Generate Data
+
+- chmod +x generate_data.bash
+- run: `./generate_data.bash`

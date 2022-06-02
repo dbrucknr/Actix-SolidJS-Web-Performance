@@ -1,0 +1,1 @@
+psql --dbname=rest_api --file=fixtures/rest_api.sql
