@@ -1,13 +1,13 @@
 import { Component, createEffect } from "solid-js";
 import { UserService } from "../services/userService";
 
-export const Index: Component = () => {
+export const Main: Component = () => {
   const { getAllUsers } = UserService();
   createEffect(() => getAllUsers());
 
   return (
     <>
-      <h1>Index</h1>
+      <h1>Main</h1>
     </>
   );
 };
