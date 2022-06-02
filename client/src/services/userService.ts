@@ -1,3 +1,4 @@
+import { setState } from "../store/store";
 import { attempt } from "../utilities/attempt";
 import { ServiceConfig } from "./config";
 
@@ -6,7 +7,8 @@ export const UserService = () => {
 
   const getAllUsers = () =>
     attempt(async () => {
-      return await GET("users");
+      const users = await GET("users");
+      setState("users", () => users);
     });
 
   const getSpecificUser = (id: number) =>
