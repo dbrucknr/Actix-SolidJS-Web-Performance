@@ -1,9 +1,5 @@
 import { createStore } from "solid-js/store";
 
-interface AppState {
-  users: User[];
-}
-
 interface User {
   id: string;
   email: string;
@@ -12,8 +8,14 @@ interface User {
   updated_at: string;
 }
 
+interface AppState {
+  users: User[];
+  selectedUser: User | null;
+}
+
 const initialState: AppState = {
   users: [],
+  selectedUser: null,
 };
 
 export const [state, setState] = createStore<AppState>(initialState);
