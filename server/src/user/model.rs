@@ -8,7 +8,7 @@ use uuid::Uuid;
 
 #[derive(Serialize, Deserialize, AsChangeset)]
 #[table_name = "user"]
-pub struct UserMessage {
+pub struct NewUser {
     pub email: String,
     pub password: String,
 }
@@ -40,7 +40,7 @@ impl User {
         Ok(user)
     }
 
-    pub fn create(user: UserMessage) -> Result<Self, ApiError> {
+    pub fn create(user: NewUser) -> Result<Self, ApiError> {
         let conn = db::connection()?;
 
         let user = User::from(user);
@@ -51,7 +51,7 @@ impl User {
         Ok(user)
     }
 
-    pub fn update(id: Uuid, user: UserMessage) -> Result<Self, ApiError> {
+    pub fn update(id: Uuid, user: NewUser) -> Result<Self, ApiError> {
         let conn = db::connection()?;
 
         let user = diesel::update(user::table)
@@ -71,8 +71,8 @@ impl User {
     }
 }
 
-impl From<UserMessage> for User {
-    fn from(user: UserMessage) -> Self {
+impl From<NewUser> for User {
+    fn from(user: NewUser) -> Self {
         User {
             id: Uuid::new_v4(),
             email: user.email,

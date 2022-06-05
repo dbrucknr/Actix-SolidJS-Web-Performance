@@ -1,5 +1,5 @@
 use crate::api_error::ApiError;
-use crate::user::{User, UserMessage};
+use crate::user::{NewUser, User};
 use actix_web::{delete, get, post, put, web, HttpResponse};
 use serde_json::json;
 use uuid::Uuid;
@@ -17,16 +17,13 @@ async fn find(id: web::Path<Uuid>) -> Result<HttpResponse, ApiError> {
 }
 
 #[post("/users")]
-async fn create(user: web::Json<UserMessage>) -> Result<HttpResponse, ApiError> {
+async fn create(user: web::Json<NewUser>) -> Result<HttpResponse, ApiError> {
     let user = User::create(user.into_inner())?;
     Ok(HttpResponse::Ok().json(user))
 }
 
 #[put("/users/{id}")]
-async fn update(
-    id: web::Path<Uuid>,
-    user: web::Json<UserMessage>,
-) -> Result<HttpResponse, ApiError> {
+async fn update(id: web::Path<Uuid>, user: web::Json<NewUser>) -> Result<HttpResponse, ApiError> {
     let user = User::update(id.into_inner(), user.into_inner())?;
     Ok(HttpResponse::Ok().json(user))
 }
